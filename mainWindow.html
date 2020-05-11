@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Shopping list</title>
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	</head>
+	<body>
+	<nav>
+		<div class=""nav-wrapper">
+		<a class="brand-logo" center>Shopping List</a>
+		</div>
+	</nav>
+		<ul></ul>
+	</body>
+<script>
+	const ul = document.querySelector('ul');
+
+	//  Register our preload object callbacks
+	window.shoppingList.receive("addListItem", (item) => {
+		ul.className = "collection"
+		console.log("Receive request for new item: " + item);
+		const li = document.createElement('li');
+		li.className = 'collection-item';
+		const itemText = document.createTextNode(item);
+		li.append(itemText);
+		ul.appendChild(li);
+	});
+
+	window.shoppingList.receive("item:clear", () => {
+		console.log("clear items");
+		ul.innerHTML = '';
+		ul.classList.remove("collection-item");
+	});
+
+	//  Remove the object from the DOM
+	function removeItem(event) {
+		console.log(event.target);
+		event.target.remove();
+		if (ul.children.length === 0) {
+			ul.classList.remove("collection-item");
+		}
+	}
+
+	//  Remove item on doubleclick.
+	ul.addEventListener('dblclick', removeItem);
+
+</script>
+</html>
